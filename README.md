@@ -4,6 +4,11 @@
 Generates a random newton fractal.
 
 ### Usage
+First:
+```
+npm install
+```
+Then after packages are installed, generate a fractal with:
 ```
 node app.js <size> <filename>
 ```
