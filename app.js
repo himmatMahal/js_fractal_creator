@@ -71,7 +71,8 @@ function newtonFractal( filepath, topLeft, length, f, fp, maxitr ) {
     });    
 }
 
-/** functions to apply method to
+/** Creating function to apply method to, a random combination of some
+ *  polynomial with a sin function
  */
 let a = Math.floor( 1 + 8*(Math.random()) );
 let b = Math.floor( 1 + 8*(Math.random()) );
@@ -89,4 +90,5 @@ let fp = (x) => {
             .add(x.mul(e).cos().mul(e));
 }
 
+// Generate the image
 newtonFractal( filenm, topLeft, length, f, fp, maxitr );
