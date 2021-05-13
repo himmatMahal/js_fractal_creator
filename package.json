@@ -1,0 +1,16 @@
+{
+  "name": "js_fractal_creator",
+  "version": "1.0.0",
+  "description": "### Description Generates a random newton fractal.",
+  "main": "app.js",
+  "dependencies": {
+    "complex.js": "^2.0.12",
+    "jimp": "^0.16.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
