@@ -16,6 +16,22 @@ let length  = 4.0;
 
 let maxitr  = 8;  // default max iterations
 
+// Custom method 
+let customMethod_a = (f, fp, x0, max_iter) => {
+    /** f   - returns complex, takes 1 complex param
+     *  fp  - derivative of f
+     *  x0  - initial guess
+     */
+    let root = new Complex(x0);
+    for (let i=0; i<max_iter; i++) {
+        let subVal = f(root).add(fp(root)).div( fp(root).mul(f(root)) );
+        root = root.sub( subVal );
+    }
+    return root;
+}
+
+
+// Newton's method
 let newtonsMethod = (f, fp, x0, max_iter) => {
     /** f   - returns complex, takes 1 complex param
      *  fp  - derivative of f
@@ -30,13 +46,14 @@ let newtonsMethod = (f, fp, x0, max_iter) => {
 } 
 
 
-function newtonFractal( filepath, topLeft, length, f, fp, maxitr ) {
+function fractal( filepath, topLeft, length, f, fp, maxitr, method_fn ) {
     /** filepath - name of output file (e.g. myFractal.png)
      *  topLeft  - anchor of top left corner of image in complex plane
      *  length   - length of square image in complex plane
-     *  f        - function for Newton's method
-     *  fp       - derivative of function for Newton's method
-     *  maxitr   - maximum number of iterations for Newton's method
+     *  f        - function
+     *  fp       - derivative of f
+     *  maxitr   - maximum number of iterations for method
+     *  method_fn - method to iterate to create fractal
      */
     
     let stepsize = length / sizesq;
@@ -49,9 +66,9 @@ function newtonFractal( filepath, topLeft, length, f, fp, maxitr ) {
             (x, y, idx) => {
 
                 let p = topLeft.add(new Complex(stepsize*x, (-1)*stepsize*y));
-                let z = newtonsMethod(f, fp, p, maxitr,);
+                let z = method_fn(f, fp, p, maxitr);
              
-                // Applying color map to color the result of Newton's method 
+                // Applying color map to color the result of method 
                 // a particular color
                 if ( !( z.isNaN() ) ) {
                     let r = new Complex(z.re);
@@ -74,21 +91,28 @@ function newtonFractal( filepath, topLeft, length, f, fp, maxitr ) {
 /** Creating function to apply method to, a random combination of some
  *  polynomial with a sin function
  */
-let a = Math.floor( 1 + 8*(Math.random()) );
+
 let b = Math.floor( 1 + 8*(Math.random()) );
 let c = Math.floor( 1 + 8*(Math.random()) );
 let d = Math.floor( 1 + 8*(Math.random()) );
 let e = Math.floor( 1 + 20*(Math.random() - 0.5) );
 
 let f = (x) => {
-    return x.pow(a).add(x.pow(b).add(x.pow(c).add(x.pow(d))))
-            .add(x.mul(e).sin());
+    return x.pow(b).add(x.pow(c).add(x.pow(d))).add(x.mul(e).sin());
 }
 let fp = (x) => {
-    return x.pow(a-1).mul(a).add(x.pow(b-1).mul(b).add(x.pow(c-1).mul(c)
-            .add(x.pow(d-1).mul(d))))
+    return x.pow(b-1).mul(b).add(x.pow(c-1).mul(c)
+            .add(x.pow(d-1).mul(d)))
             .add(x.mul(e).cos().mul(e));
 }
 
-// Generate the image
-newtonFractal( filenm, topLeft, length, f, fp, maxitr );
+// Generate the image using either newton's method, or custom method a
+let a = Math.floor( Math.random() + 0.5 );
+if (a==1) {
+    console.log("Using custom method");
+    fractal( filenm, topLeft, length, f, fp, maxitr, customMethod_a );
+}
+else {
+    console.log("Using newton's method");
+    fractal( filenm, topLeft, length, f, fp, maxitr, newtonsMethod );
+}

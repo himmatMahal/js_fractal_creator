@@ -1,7 +1,8 @@
 # Fractal generator
 
 ### Description
-Generates a random newton fractal.
+Generates a random fractal. Uses either Newton's method, or 
+another custom method.
 
 ### Usage
 First:
